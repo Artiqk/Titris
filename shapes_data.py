@@ -1,20 +1,19 @@
-top_left_angle = [
+angle_top_left = [
     [1, 1],
     [1, 0]
 ]
 
-top_right_angle = [
+angle_top_right = [
     [1, 1],
     [0, 1]
 ]
 
-bot_left_angle = [
+angle_bot_left = [
     [1, 0],
     [1, 1]
 ]
 
-
-bot_right_angle = [
+angle_bot_right = [
     [0, 1],
     [1, 1]
 ]
