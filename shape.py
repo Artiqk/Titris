@@ -4,6 +4,7 @@ class Shape:
     def __init__(self, shape):
         self.shape = shape
         self.width, self.height = self.get_sizes()
+        self.x, self.y = self.get_origin()
 
 
     def get_sizes(self):
@@ -19,7 +20,7 @@ class Shape:
 
 
     def get_all_coordinates(self):
-        origin_x, origin_y = self.get_origin()
+        origin_x, origin_y = self.x, self.y
         coordinates = []
         
         for y in range(self.height):
