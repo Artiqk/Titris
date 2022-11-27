@@ -7,7 +7,7 @@ def insert_shape_on_board(shape, board, x, y):
         for i in range(len(blocks_coordinates)):
             block_x = x + blocks_coordinates[i][0]
             block_y = y - blocks_coordinates[i][1]
-            board.board[block_x][block_y] = 'X'
+            board.board[block_x][block_y] = 1
     
 
 def block_position_valid(x, y, board):
