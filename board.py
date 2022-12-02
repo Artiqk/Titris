@@ -1,21 +1,21 @@
-
+from termcolor import colored
 
 class Board:
 
     def __init__(self, width, height):
         self.width  = width
         self.height = height
-        self.create()
+        self.board = self.create_empty()
     
 
-    def create(self):
+    def create_empty(self):
         board = []
         for x in range(self.width):
             row = []
             for y in range(self.height):
                 row.append('.')
             board.append(row)
-        self.board = board
+        return board
 
 
     def display(self):
@@ -24,18 +24,23 @@ class Board:
         print()
         for y in range(self.height):
             for x in range(self.width):
-                print(self.board[x][y], end=' ')
+                element = self.board[x][y]
+                if type(element) is dict:
+                    print(colored(element["content"], element["color"]), end=' ')
+                else:
+                    print(element, end=' ')
             print(y)
         print()
 
-    def update(self):
-        characters = {
-            0: '.',
-            1: chr(int('0x25A0', 0)) # Hex for solid square unicode character
-        }
-        board = self.board
-        for y in range(self.height):
-            for x in range(self.width):
-                case = self.board[x][y]
-                if case in characters:
-                   self.board[x][y] = characters[case]
+
+    def update(self, shapes):
+        solid_square = chr(int('0x25A0', 0)) # Hex for solid square unicode character
+        self.board = self.create_empty()
+        for shape in shapes:
+            for coordinates in shape.blocks:
+                x = shape.x + coordinates[0]
+                y = shape.y - coordinates[1]
+                self.board[x][y] = {
+                    "content": solid_square,
+                    "color": shape.color
+                }
