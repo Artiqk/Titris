@@ -1,10 +1,14 @@
 
 class Shape:
 
-    def __init__(self, shape):
+    def __init__(self, shape, x, y, color):
         self.shape = shape
         self.width, self.height = self.get_sizes()
-        self.x, self.y = self.get_origin()
+        self.origin_x, self.origin_y = self.get_origin()
+        self.x = x
+        self.y = y
+        self.color = color
+        self.blocks = self.update_blocks()
 
 
     def get_sizes(self):
@@ -19,8 +23,8 @@ class Shape:
         return x, y
 
 
-    def get_all_coordinates(self):
-        origin_x, origin_y = self.x, self.y
+    def update_blocks(self):
+        origin_x, origin_y = self.origin_x, self.origin_y
         coordinates = []
         
         for y in range(self.height):
@@ -29,3 +33,9 @@ class Shape:
                     coordinates.append((abs(origin_x - x), abs(origin_y - y)))
         
         return coordinates
+
+
+    def move(self, offset_x, offset_y):
+        self.x += offset_x
+        self.y += offset_y
+        self.blocks = self.update_blocks()
