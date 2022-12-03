@@ -35,6 +35,13 @@ class Shape:
         return coordinates
 
 
+    def update_when_sliced(self):
+        self.origin_x, self.origin_y = self.get_origin()
+        self.width, self.height = self.get_sizes()
+        self.blocks = self.update_blocks()
+        self.y -= 1
+
+
     def move(self, offset_x, offset_y):
         self.x += offset_x
         self.y += offset_y
