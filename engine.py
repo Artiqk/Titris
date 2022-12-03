@@ -21,13 +21,20 @@ def get_completed_rows(board): # FIXME - reverse completed rows
                 blocks_count += 1
         if blocks_count == board.width:
             completed_rows.append(y)
-    return completed_rows
+    return completed_rows[::-1]
 
-def is_row_complete(row, board):
-    return row in get_completed_rows(board)
 
 def remove_row(row, shapes):
-    for shape in shapes:
-        if row == shape.y:
-            del shape.shape[-1]
+    shapes_to_remove = []
+    for i in range(len(shapes)):
+        shape = shapes[i]
+        if shape.y == row:
+            if len(shape.shape) > 0:
+                del shape.shape[-1]
+            if len(shape.shape) == 0:
+                shapes_to_remove.append(shape)
+            else:
+                shape.update_when_sliced()
 
+    for shape in shapes_to_remove:
+        shapes.remove(shape)
