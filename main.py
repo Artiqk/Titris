@@ -6,29 +6,32 @@ from shapes_data import *
 from time import sleep
 from os import system
 
-def game():
-    system("clear||cls")
-    board.update()
+system('color')
+
+shapes = [
+    Shape(z, 4, 19, "yellow"),
+    Shape(angle_bot_left, 3, 19, "cyan"), 
+    Shape(l_right, 7, 19, "green"),
+    Shape(t_bot, 0, 19, "blue"),
+    Shape(t_bot, 6, 18, "blue"),
+    Shape(t_top, 1, 18, "blue"),
+    Shape(i, 0, 18, "magenta"),
+    Shape(square, 4, 17, "white"),
+    Shape(i, 6, 18, "magenta"),
+    Shape(square, 8, 17, "white")
+]
+
+def game(shapes):
+    # system("clear||cls")
+    board.update(shapes)
     board.display()
-    sleep(1)
+    system("pause")
 
 board = Board(10, 20)
 
-shape_z = Shape(z)
-shape_angle = Shape(angle_bot_left)
-shape_l = Shape(l_right)
+game(shapes)
 
+for row in get_completed_rows(board):
+    remove_row(row, shapes)
+    game(shapes)
 
-game()
-
-insert_shape_on_board(shape_z, board, 4, 19)
-game()
-
-insert_shape_on_board(shape_angle, board, 1, 19)
-game()
-
-insert_shape_on_board(shape_l, board, 7, 19)
-game()
-
-shape_z.y -= 2
-game()
