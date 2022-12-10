@@ -11,7 +11,7 @@ def blocks_positions_valid(blocks_coordinates, x, y, board):
     return True
 
 
-def get_completed_rows(board): # FIXME - reverse completed rows
+def get_completed_rows(board):
     completed_rows = []
 
     for y in range(board.height):
