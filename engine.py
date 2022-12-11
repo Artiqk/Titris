@@ -25,16 +25,19 @@ def get_completed_rows(board):
 
 
 def remove_row(row, shapes):
-    shapes_to_remove = []
-    for i in range(len(shapes)):
-        shape = shapes[i]
-        if shape.y == row:
-            if len(shape.shape) > 0:
-                del shape.shape[-1]
-            if len(shape.shape) == 0:
-                shapes_to_remove.append(shape)
-            else:
-                shape.update_when_sliced()
+    for shape in shapes:
+        blocks = shape.blocks
+        height = shape.height
+        for block in blocks:
+            shape_row = block[1]
+            y = shape.y - shape_row
+            if y == row:
+                row_to_remove = (height - shape_row) - 1
+                remove_shape_row(shape, row_to_remove)
+                shape.blocks = shape.update_blocks()
 
-    for shape in shapes_to_remove:
-        shapes.remove(shape)
+
+def remove_shape_row(shape, row_to_remove):
+    width = shape.width
+    for i in range(width):
+        shape.shape[row_to_remove][i] = 0
