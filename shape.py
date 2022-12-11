@@ -8,7 +8,7 @@ class Shape:
         self.x = x
         self.y = y
         self.color = color
-        self.blocks = self.update_blocks()
+        self.update_blocks()
 
 
     def get_sizes(self):
@@ -32,17 +32,10 @@ class Shape:
                 if self.shape[y][x] == 1:
                     coordinates.append((abs(origin_x - x), abs(origin_y - y)))
         
-        return coordinates
-
-
-    def update_when_sliced(self):
-        self.origin_x, self.origin_y = self.get_origin()
-        self.width, self.height = self.get_sizes()
-        self.blocks = self.update_blocks()
-        self.y -= 1
+        self.blocks = coordinates
 
 
     def move(self, offset_x, offset_y):
         self.x += offset_x
         self.y += offset_y
-        self.blocks = self.update_blocks()
+        self.update_blocks()
