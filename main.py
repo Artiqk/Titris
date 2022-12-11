@@ -1,7 +1,7 @@
 from board import *
 from shape import *
 from engine import *
-from shapes_data import *
+from default_shapes import *
 
 from time import sleep
 from os import system
@@ -12,26 +12,36 @@ shapes = [
     Shape(z, 4, 19, "yellow"),
     Shape(angle_bot_left, 3, 19, "cyan"), 
     Shape(l_right, 7, 19, "green"),
-    Shape(t_bot, 0, 19, "blue"),
-    Shape(t_bot, 6, 18, "blue"),
+    Shape(t_bot, 0, 19, "red"),
     Shape(t_top, 1, 18, "blue"),
     Shape(i, 0, 18, "magenta"),
+    Shape(l_bot, 7, 18, "red"),
     Shape(square, 4, 17, "white"),
     Shape(i, 6, 18, "magenta"),
-    Shape(square, 8, 17, "white")
+    Shape(square, 8, 17, "white"),
+    Shape(l_left, 3, 14, "green"),
+    Shape(square, 4, 15, "white")
 ]
 
 def game(shapes):
-    # system("clear||cls")
+    system("clear||cls")
     board.update(shapes)
     board.display()
     system("pause")
+    # sleep(0.2)
 
 board = Board(10, 20)
+
+print(len(shapes))
 
 game(shapes)
 
 for row in get_completed_rows(board):
     remove_row(row, shapes)
-    game(shapes)
 
+game(shapes)
+
+remove_empty_shapes(shapes)
+
+while fall_shapes(shapes, board):
+    game(shapes)
