@@ -1,8 +1,9 @@
+import copy
 
 class Shape:
 
     def __init__(self, shape, x, y, color):
-        self.shape = shape
+        self.shape = copy.deepcopy(shape)
         self.width, self.height = self.get_sizes()
         self.origin_x, self.origin_y = self.get_origin()
         self.x = x
@@ -10,6 +11,9 @@ class Shape:
         self.color = color
         self.update_blocks()
 
+
+    def __str__(self):
+        return str(self.x) + ':' + str(self.y) + '  ' + self.color
 
     def get_sizes(self):
         height = len(self.shape)
