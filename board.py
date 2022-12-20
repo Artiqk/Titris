@@ -20,16 +20,16 @@ class Board:
 
     def display(self):
         for i in range(self.width):
-            print(i, end=' ')
+            print(chr(i + 97), end=' ')
         print()
         for y in range(self.height):
             for x in range(self.width):
                 element = self.board[x][y]
-                if type(element) is dict:
+                if type(element) is dict: # Si l'élèment est un dictionnaire, alors c'est un bloc d'une shape
                     print(colored(element["content"], element["color"]), end=' ')
                 else:
                     print(element, end=' ')
-            print(y)
+            print(chr(y + 65))
         print()
 
 
