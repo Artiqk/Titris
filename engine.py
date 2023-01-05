@@ -1,4 +1,10 @@
+from termcolor import colored
+
 def block_position_valid(x, y, board):
+    x_valid = x >= 0 and x < board.width
+    y_valid = y >= 0 and y < board.height
+    if not (x_valid and y_valid):
+        return False
     return (board.board[x][y] == '.')
 
 
@@ -11,7 +17,7 @@ def shape_position_valid(shape, new_x, new_y, board):
     return True
 
 
-def get_completed_rows(board):
+def get_completed_rows(board): # FIXME - Move to class Board ?
     completed_rows = []
 
     for y in range(board.height):
@@ -38,7 +44,7 @@ def remove_row(row, shapes):
     
 
 
-def remove_shape_row(shape, row_to_remove):
+def remove_shape_row(shape, row_to_remove): # FIXME - Move to class Shape ? 
     width = shape.width
     for i in range(width):
         shape.shape[row_to_remove][i] = 0
@@ -59,7 +65,6 @@ def remove_empty_shapes(shapes):
 
 def fall_shapes(shapes, board):
     shapes.sort(key=lambda x: x.y, reverse=True)
-    # print([str(shape) for shape in shapes])
     shape_moved = False
     for shape in shapes:
         if below_shape_free(shape, board):
@@ -92,11 +97,51 @@ def below_block_free(block, shape, board):
     return True
 
 
-def is_block_from_shape(block_x, block_y, shape):
+def is_block_from_shape(block_x, block_y, shape): # FIXME - Move to class Shape ? 
     for block in shape.blocks:
         x = shape.x + block[0]
         y = shape.y - block[1]
         if (x == block_x) and (y == block_y):
             return True
     return False
-        
+
+
+
+def draw_shapes_on_line(shapes, add_digits=True):
+    solid_square = chr(int('0x25A0', 0))
+    height = len(max(shapes, key=len))
+
+    for i in range(height):
+        for shape in shapes:
+            if len(shape) >= height:
+                for block in shape[len(shape) - height]:
+                    if block == 1:
+                        print(colored(solid_square, "white"), end=' ')
+                    else:
+                        print(' ', end=' ')
+            else:
+                print(' ' * (len(shape[0]) * 2), end='')
+            print(' ', end=' ')
+        print()
+        height -= 1
+
+    if (add_digits):
+        for i in range(len(shapes)):
+            print(str(i + 1) + '.', end='')
+            print(' ' * (len(shapes[i][0]) * 2), end='')
+    print()
+    print()
+                
+
+
+def draw_shape(shape, color): # FIXME - Move to class Shape ? 
+    solid_square = chr(int('0x25A0', 0))
+    print()
+    for row in shape:
+        for block in row:
+            if block == 1:
+                print(colored(solid_square, color), end=' ')
+            else:
+                print(' ', end=' ')
+        print()
+    print()
