@@ -30,8 +30,7 @@ class Board:
                 else:
                     print(element, end=' ')
             print(chr(y + 65))
-        print()
-
+        print()  
 
     def update(self, shapes):
         solid_square = chr(int('0x25A0', 0)) # Hex for solid square unicode character
