@@ -11,6 +11,7 @@ board = Board(diamond)
 
 shapes = []
 
+score = 0
 
 def remove_row(row, shapes):
     for shape in shapes:
@@ -24,28 +25,10 @@ def remove_row(row, shapes):
                 remove_shape_row(shape, row_to_remove)
 
 
-def remove_column(column, shapes):
-    for shape in shapes:
-        blocks = shape.blocks
-        width = shape.width
-        for block in blocks:
-            shape_column = block[0]
-            x = shape.x + shape_column
-            if x == column:
-                column_to_remove = (width - shape_column) - 1
-                remove_shape_column(shape, column_to_remove)
-
-
 def remove_shape_row(shape, row_to_remove): # FIXME - Move to class Shape ? 
     width = shape.width
     for i in range(width):
         shape.shape[row_to_remove][i] = 0
-
-
-def remove_shape_column(shape, column_to_remove):
-    height = shape.height
-    for i in range(height):
-        shape.shape[i][column_to_remove] = 0
 
 
 def remove_empty_shapes(shapes):
@@ -62,12 +45,17 @@ def remove_empty_shapes(shapes):
 
 def draw():
     system("clear||cls")
+    print("===============")
+    print(f" Score: {score}")
+    print("===============")
     board.display()
     sleep(0.05)
 
 
 
 def loop():
+    global score
+
     while handle_shapes_fall(shapes, board):
         board.update(shapes)
         draw()
@@ -77,6 +65,7 @@ def loop():
     if len(completed_rows) > 0:
         for row in completed_rows:
             remove_row(row, shapes)
+            score += 100
         for shape in shapes:
             shape.update_blocks()
         remove_empty_shapes(shapes)
@@ -88,5 +77,6 @@ def loop():
 
 
 draw()
+
 while 1:
     loop()
