@@ -30,7 +30,7 @@ def block_position_valid(x, y, board):
     y_valid = y >= 0 and y < board.height
     if not (x_valid and y_valid):
         return False
-    return (board.board[x][y] == '.')
+    return (board.board[y][x] == '.')
 
 
 def shape_position_valid(shape, new_x, new_y, board):
@@ -48,7 +48,7 @@ def get_completed_rows(board): # FIXME - Move to class Board ?
     for y in range(board.height):
         blocks_count = 0
         for x in range(board.width):
-            if type(board.board[x][y]) is dict or board.board[x][y] == 2:
+            if type(board.board[y][x]) is dict or board.board[y][x] == 2:
                 blocks_count += 1
         if blocks_count == board.width:
             completed_rows.append(y)
@@ -98,7 +98,7 @@ def below_block_free(block, shape, board):
     if below_y >= board.height:
         return False
 
-    below_y_block = board.board[block_x][below_y]
+    below_y_block = board.board[below_y][block_x]
     
     if type(below_y_block) is dict:
         return is_block_from_shape(block_x, below_y, shape)
@@ -235,6 +235,3 @@ def insert_new_shape(shapes, board, map_shape):
             fail_counter += 1
         
         check_game_over(fail_counter)
-    
-    # board.board = np.array(board.board)
-    # np.transpose(board.board)
