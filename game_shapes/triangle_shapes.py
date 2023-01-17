@@ -25,8 +25,8 @@ triangle_shapes = {
     ],
 
     "secondary_diagonal": [
-        [0, 0, 1]
-        [0, 1, 0]
+        [0, 0, 1],
+        [0, 1, 0],
         [1, 0, 0]
     ],
 
