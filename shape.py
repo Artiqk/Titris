@@ -28,14 +28,22 @@ class Shape:
 
 
     def update_blocks(self):
-        origin_x, origin_y = self.origin_x, self.origin_y
         coordinates = []
-        
-        for y in range(self.height):
-            for x in range(self.width):
-                if self.shape[y][x] == 1:
-                    coordinates.append((abs(origin_x - x), abs(origin_y - y)))
-        
+
+        for i in range(len(self.shape) - 1, -1, -1):
+            if all(self.shape[i][j] == 0 for j in range(len(self.shape[i]))):
+                del self.shape[i]
+
+        if len(self.shape) > 0:
+            self.width, self.height = self.get_sizes()
+            
+            self.origin_x, self.origin_y = self.get_origin()
+            
+            for y in range(self.height):
+                for x in range(self.width):
+                    if self.shape[y][x] == 1:
+                        coordinates.append((abs(self.origin_x - x), abs(self.origin_y - y)))
+
         self.blocks = coordinates
 
 

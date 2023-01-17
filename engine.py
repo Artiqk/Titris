@@ -1,5 +1,20 @@
 from termcolor import colored
 
+from shape import *
+from board import *
+from default_shapes import *
+
+from time import sleep
+from os import system
+
+import numpy as np
+import random
+import string
+
+
+colors = ['red', 'green', 'yellow', 'blue', 'magenta', 'cyan', 'white']
+
+
 def block_position_valid(x, y, board):
     x_valid = x >= 0 and x < board.width
     y_valid = y >= 0 and y < board.height
@@ -23,47 +38,30 @@ def get_completed_rows(board): # FIXME - Move to class Board ?
     for y in range(board.height):
         blocks_count = 0
         for x in range(board.width):
-            if type(board.board[x][y]) is dict:
+            if type(board.board[x][y]) is dict or board.board[x][y] == 2:
                 blocks_count += 1
         if blocks_count == board.width:
             completed_rows.append(y)
     return completed_rows[::-1]
 
 
-def remove_row(row, shapes):
-    for shape in shapes:
-        blocks = shape.blocks
-        height = shape.height
-        for block in blocks:
-            shape_row = block[1]
-            y = shape.y - shape_row
-            if y == row:
-                row_to_remove = (height - shape_row) - 1
-                remove_shape_row(shape, row_to_remove)
-                shape.update_blocks()
-    
+def get_completed_columns(board):
+    completed_columns = []
+    width = len(board[0])
+    height = len(board)
+
+    for y in range(height):
+        blocks_count = 0
+        for x in range(width):
+            if type(board[y][x]) is dict or board[y][x] == 2:
+                blocks_count += 1
+        if blocks_count == height:
+            completed_columns.append(y)
+            
+    return completed_columns
 
 
-def remove_shape_row(shape, row_to_remove): # FIXME - Move to class Shape ? 
-    width = shape.width
-    for i in range(width):
-        shape.shape[row_to_remove][i] = 0
-
-
-
-def remove_empty_shapes(shapes):
-    shapes_to_remove_index = []
-    for i in range(len(shapes)):
-        if len(shapes[i].blocks) == 0:
-            shapes_to_remove_index.append(i)
-
-    shapes_to_remove_index = shapes_to_remove_index[::-1]
-
-    for index in shapes_to_remove_index:
-        del shapes[index]
-
-
-def fall_shapes(shapes, board):
+def handle_shapes_fall(shapes, board):
     shapes.sort(key=lambda x: x.y, reverse=True)
     shape_moved = False
     for shape in shapes:
@@ -71,6 +69,7 @@ def fall_shapes(shapes, board):
             shape.move(0, 1)
             shape_moved = True
     return shape_moved
+
 
 
 def below_shape_free(shape, board): # FIXME - Rename function
@@ -94,6 +93,9 @@ def below_block_free(block, shape, board):
     if type(below_y_block) is dict:
         return is_block_from_shape(block_x, below_y, shape)
     
+    if below_y_block == 2:
+        return False
+
     return True
 
 
@@ -145,3 +147,84 @@ def draw_shape(shape, color): # FIXME - Move to class Shape ?
                 print(' ', end=' ')
         print()
     print()
+
+
+def get_next_shape():
+    next_shape = default_shapes[random.choice(list(default_shapes.keys()))]
+    shape_color = random.choice(colors)
+    return next_shape, shape_color
+
+
+def check_game_over(fail_counter):
+    if fail_counter == 3:
+        print("Game Over!")
+        exit(1)
+
+
+def get_shape_coords(shape, board):
+    x = -1
+    y = -1
+
+    x_valid = False
+    y_valid = False
+
+    fail_counter = 0
+
+    while not (x_valid and y_valid):
+        coords = input("Entrez les coordonnées pour la pièce ci-dessus (aA): ")
+
+        x = ord(coords[0].lower()) - 97
+        y = ord(coords[1].upper()) - 65
+
+        x_valid = x >= 0 and x < board.width
+        y_valid = y >= 0 and y < board.height
+
+        if not (x_valid and y_valid):
+            fail_counter += 1
+        
+        check_game_over(fail_counter)
+
+    return x, y
+
+
+def choose_next_shape(number_of_shapes=3): # Ce parametre permet de definir combien de shape on propose à l'utilisateur => par défaut il est à 3
+    shapes_choice = []
+    shapes_colors = []
+
+    for i in range(number_of_shapes):
+        next_shape, shape_color = get_next_shape()
+        shapes_choice.append(next_shape)
+        shapes_colors.append(shape_color)
+
+    draw_shapes_on_line(shapes_choice)
+    chosen_shape = -1
+    while chosen_shape < 1 or chosen_shape > number_of_shapes:
+        chosen_shape = input(f"Choisissez la pièce que vous voulez utiliser (1-{number_of_shapes}) : ")
+        if chosen_shape.isdigit(): # Cette condition gère une partie des entrées indésirables
+            chosen_shape = int(chosen_shape)
+        else: # Celle-là aussi
+            chosen_shape = -1
+    index = chosen_shape - 1
+    return shapes_choice[index], shapes_colors[index]
+
+
+def insert_new_shape(shapes, board):
+    fail_counter = 0
+    position_valid = False
+    shape, color = choose_next_shape(10)
+    draw_shape(shape, color)
+
+    while not position_valid:
+        x, y = get_shape_coords(shape, board)
+        new_shape = Shape(shape, x, y, color)
+
+        if shape_position_valid(new_shape, x, y, board):
+            shapes.append(new_shape)
+            position_valid = True
+        else:
+            fail_counter += 1
+        
+        check_game_over(fail_counter)
+    
+    board.board = np.array(board.board)
+    np.transpose(board.board)
