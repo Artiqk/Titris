@@ -1,5 +1,14 @@
 from engine import *
 from maps import *
+from main_menu import *
+
+map_settings = {
+    "circle": circle,
+    "diamond": diamond,
+    "triangle": triangle
+}
+
+map_type = map_settings[menu()]
 
 system('color')
 
@@ -7,7 +16,7 @@ seed = ''.join(random.choices(string.ascii_uppercase + string.digits, k=20))
 
 random.seed(seed)
 
-board = Board(diamond)
+board = Board(map_type)
 
 shapes = []
 
