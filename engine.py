@@ -2,7 +2,7 @@ from termcolor import colored
 
 from shape import *
 from board import *
-from default_shapes import *
+from game_shapes.default_shapes import *
 
 from time import sleep
 from os import system
