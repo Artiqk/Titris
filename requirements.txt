@@ -1,2 +1,3 @@
 termcolor >= 2.2.0
 numpy >= 1.24.0
+pyfiglet >= 0.7
