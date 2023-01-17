@@ -8,7 +8,9 @@ map_settings = {
     "triangle": triangle
 }
 
-map_type = map_settings[menu()]
+map_shape = menu()
+
+map_type = map_settings[map_shape]
 
 system('color')
 
@@ -79,7 +81,7 @@ def loop():
             shape.update_blocks()
         remove_empty_shapes(shapes)
     else:
-        insert_new_shape(shapes, board)
+        insert_new_shape(shapes, board, map_shape)
 
     board.update(shapes)
     draw()
