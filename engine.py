@@ -3,6 +3,9 @@ from termcolor import colored
 from shape import *
 from board import *
 from game_shapes.default_shapes import *
+from game_shapes.circle_shapes import *
+from game_shapes.diamond_shapes import *
+from game_shapes.triangle_shapes import *
 
 from time import sleep
 from os import system
@@ -13,6 +16,13 @@ import string
 
 
 colors = ['red', 'green', 'yellow', 'blue', 'magenta', 'cyan', 'white']
+
+
+shape_settings = {
+    "circle": circle_shapes,
+    "diamond": diamond_shapes,
+    "triangle": triangle_shapes
+}
 
 
 def block_position_valid(x, y, board):
@@ -149,12 +159,6 @@ def draw_shape(shape, color): # FIXME - Move to class Shape ?
     print()
 
 
-def get_next_shape():
-    next_shape = default_shapes[random.choice(list(default_shapes.keys()))]
-    shape_color = random.choice(colors)
-    return next_shape, shape_color
-
-
 def check_game_over(fail_counter):
     if fail_counter == 3:
         print("Game Over!")
@@ -187,12 +191,18 @@ def get_shape_coords(shape, board):
     return x, y
 
 
-def choose_next_shape(number_of_shapes=3): # Ce parametre permet de definir combien de shape on propose à l'utilisateur => par défaut il est à 3
+def get_next_shape(map_shape):
+    next_shape = default_shapes[random.choice(list(default_shapes.keys()))]
+    shape_color = random.choice(colors)
+    return next_shape, shape_color
+
+
+def choose_next_shape(map_shape, number_of_shapes=3): # Ce parametre permet de definir combien de shape on propose à l'utilisateur => par défaut il est à 3
     shapes_choice = []
     shapes_colors = []
 
     for i in range(number_of_shapes):
-        next_shape, shape_color = get_next_shape()
+        next_shape, shape_color = get_next_shape(map_shape)
         shapes_choice.append(next_shape)
         shapes_colors.append(shape_color)
 
@@ -208,10 +218,10 @@ def choose_next_shape(number_of_shapes=3): # Ce parametre permet de definir comb
     return shapes_choice[index], shapes_colors[index]
 
 
-def insert_new_shape(shapes, board):
+def insert_new_shape(shapes, board, map_shape):
     fail_counter = 0
     position_valid = False
-    shape, color = choose_next_shape(10)
+    shape, color = choose_next_shape(map_shape, 10)
     draw_shape(shape, color)
 
     while not position_valid:
@@ -226,5 +236,5 @@ def insert_new_shape(shapes, board):
         
         check_game_over(fail_counter)
     
-    board.board = np.array(board.board)
-    np.transpose(board.board)
+    # board.board = np.array(board.board)
+    # np.transpose(board.board)
