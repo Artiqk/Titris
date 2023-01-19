@@ -1,7 +1,5 @@
 from termcolor import colored
 
-import math
-
 from shape import *
 from board import *
 from game_shapes.default_shapes import *
