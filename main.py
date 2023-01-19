@@ -8,7 +8,9 @@ map_settings = {
     "triangle": triangle
 }
 
-map_shape = menu()
+os.system("cls||clear")
+
+map_shape, pol_shape = menu()
 
 map_type = map_settings[map_shape]
 
@@ -81,11 +83,15 @@ def loop():
             shape.update_blocks()
         remove_empty_shapes(shapes)
     else:
-        insert_new_shape(shapes, board, map_shape)
+        insert_new_shape(shapes, board, map_shape, score, pol_shape)
 
     board.update(shapes)
     draw()
 
+
+best_player, best_score = get_player_best_score("score.txt")
+
+print(f"Le meilleur joueur est {best_player} avec un score de {best_score} points !")
 
 draw()
 
