@@ -1,12 +1,15 @@
 from engine import *
 from maps import *
 from main_menu import *
+import pygame
 
 map_settings = {
     "circle": circle,
     "diamond": diamond,
     "triangle": triangle
 }
+
+music_path = "music/theme.mp3"
 
 os.system("cls||clear")
 
@@ -25,6 +28,13 @@ board = Board(map_type)
 shapes = []
 
 score = 0
+
+
+def start_background_theme(theme_path):
+    pygame.mixer.init()
+    pygame.mixer.music.load(music_path)
+    pygame.mixer.music.play(-1)
+
 
 def remove_row(row, shapes):
     for shape in shapes:
@@ -91,7 +101,12 @@ def loop():
 
 best_player, best_score = get_player_best_score("score.txt")
 
+print()
 print(f"Le meilleur joueur est {best_player} avec un score de {best_score} points !")
+
+sleep(3)
+
+start_background_theme(music_path)
 
 draw()
 
